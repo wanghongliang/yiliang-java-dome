@@ -8,22 +8,31 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import java.io.IOException;
 import java.security.MessageDigest;
 
-public class Trader {
-
+public class TraderBuy {
     public static void main(String[] args) {
         // 账户ID
         String accountId = "168";
         // 账户KEY
         String apiKey = "267013233c62edd1255fdc7342f314df";
-        // 查询持仓信息
-        String url = "https://xt.dzd.com:8060/sa/postions";
+        // 买入股票
+        String url = "https://xt.dzd.com:8060/sa/buy";
         // 当前时间戳（秒为单位）
         int seconds = (int) (System.currentTimeMillis() / 1000);
+
+        // 股票代码
+        String code = "000756";
+        // 股票价格
+        String price = "7.0";
+        // 买入数量（必需是100的倍数，交易所规定）
+        String amount = "100";
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("accountId", accountId);
         jsonObject.put("timestramp", String.valueOf(seconds));
-        jsonObject.put("token", getSign(accountId, apiKey, String.valueOf(seconds)));
+        jsonObject.put("token", getSign(accountId,apiKey,String.valueOf(seconds),code,price,amount));
+        jsonObject.put("code",code);
+        jsonObject.put("price",price);
+        jsonObject.put("amount",amount);
         String  toJson = jsonObject.toString();
         String res = Trader.urlPostMethod(url,toJson);
         System.out.println(res);
